@@ -8,6 +8,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
+use Symfony\Component\CssSelector\CssSelectorConverter;
 
 class ExampleController extends Controller
 {
@@ -24,7 +25,7 @@ class ExampleController extends Controller
     public function example(){
         $test = new GuzzleClient([
             'base_uri' => 'https://jsonplaceholder.typicode.com',
-            'timeout' => 2
+            'timeout' => 20
         ]);
         
         // $request = new Request('GET','/posts');
@@ -47,25 +48,6 @@ class ExampleController extends Controller
         else:
             echo $error;
         endif;
-    
-        // $response = $test->send($request,['timeout'=>2] );
-        // if(isset($body)):
-        // $response = $request->getBody();
-        // return $response;
-        // $body = json_decode($body);    
-         
-            // if($statusCode == '200'):
-                // foreach ($response as $row ) {
-                    // echo '<h3>'. $row->title.'</h3>' . '<br>';
-                    // echo '<p>'. $row->body .'</p><br>';
-                // }
-            // else:
-                // echo $error;
-            // endif;
-        // else:
-            // echo $error;
-        // endif;
-       
         
     
     }
@@ -75,27 +57,33 @@ class ExampleController extends Controller
         $guz = new GuzzleClient([
             'timeout'=> 20
         ]);
+        $title_array = array();
 
         $client->setClient($guz);
 
         try{
-            $crawler  = $client->request('GET','https://symfony.com/blog/category/security-advisories/');
-            $crawled = $crawler->filter('a');
-            // ->each(
-            //     function ($node) {
-            //     print $node->text()."\n";
-            // }
-        // );
+            $crawler  = $client->request('GET','http://www.ft.com/rss/companies/aerospace-defence?isFeed=true');
+            $title = $crawler->filter('item > title')
+                ->each(
+                    function ($node) {
+                    // print $node->text()."\n";
+                    array_push($title_array, $node->text());
+                }
+            );
             
         }
         catch(ConnectException $e){
             $errorMessage= $e->getMessage();
         }
+        catch(\Exception $e){
+            $errorMessage = $e->getMessage();
+        }
 
         if(isset($errorMessage)){
             echo $errorMessage;
-        }else{
-            print_r($crawled->text());
+
+        }else{ 
+            return $title_array;
         }
 
     }

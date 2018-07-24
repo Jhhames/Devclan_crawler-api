@@ -18,3 +18,4 @@ $router->get('/', function () use ($router) {
 $router->get('/getRequest','ExampleController@example');
 $router->get('getCrawl', 'ExampleController@crawlEg');
 
+ 
