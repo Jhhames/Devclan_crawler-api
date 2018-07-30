@@ -159,7 +159,7 @@ class ExampleController extends Controller
                 if($dbQuery->exists()){
                     $dbValues = $dbQuery->get();
                 }else{
-                    $dbValues ='Invalid Category';
+                    $dbError ='Invalid Category';
                 }
             }catch(\Exception $e){
                 $dError = $e->getMessage();
