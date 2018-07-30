@@ -54,7 +54,7 @@ class ExampleController extends Controller
     
     }
 
-    public function crawlEg(){ 
+    public function crawlEg(FormRequest $request){ 
         $client = new GoutteClient();
         $guz = new GuzzleClient([
             'timeout'=> 20
@@ -67,9 +67,20 @@ class ExampleController extends Controller
         $date_array = array();
         $content_array = array();
         $status = array();
+            
+        $crawl_url = $request->get('cat');
+        $urlArray = parse_url($crawl_url);
+        $path = $urlArray['path'];
+        $exp = explode('/', $path);
+        if(count($exp) == 4){
+            $newsCategory = $exp[2];
+        }elseif(count($exp) == 3 ){
+            $newsCategory = $exp[1];
+        }
+     
         
         try{
-            $crawler  = $client->request('GET','https://www.theguardian.com/uk/environment/rss');
+            $crawler  = $client->request('GET',$crawl_url);
             $title = $crawler->filter('item > title');
             $description = $crawler->filter('item > description');
             $link = $crawler->filter('item > link');
@@ -122,7 +133,7 @@ class ExampleController extends Controller
                     $news->title = $title_array[$i];
                     $news->description = $description_array[$i];
                     $news->link = $link_array[$i];
-                    $news->category = 'environment';
+                    $news->category = $newsCategory;
                     // $news->author = $author_array[$i];
                     // $news->date = $date_array[$i];
 
@@ -134,7 +145,7 @@ class ExampleController extends Controller
                     }
                         
             }
-            return print_r($status);
+            print_r($status);
         }
         
     }
@@ -144,7 +155,12 @@ class ExampleController extends Controller
             return response()->json(['error'=>'No category specified' ]);
         }else{
             try{
-                $dbValues = DB::table('prenews')->where('category', $category)->get();
+                $dbQuery = DB::table('prenews')->where('category', $category);
+                if($dbQuery->exists()){
+                    $dbValues = $dbQuery->get();
+                }else{
+                    $dbValues ='Invalid Category';
+                }
             }catch(\Exception $e){
                 $dError = $e->getMessage();
 
@@ -159,6 +175,20 @@ class ExampleController extends Controller
             }
 
         }      
+    }
+
+    public function urltest(FormRequest $request){
+        $url = $request->get('cat');
+        $urlArray = parse_url($url);
+        $path = $urlArray['path'];
+        $exp = explode('/', $path);
+        if(count($exp) == 4){
+            echo $exp[2];
+        }elseif(count($exp) == 3 ){
+            echo $exp[1];
+        }
+   
+
     }
 
 }
