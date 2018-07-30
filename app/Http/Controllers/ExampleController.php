@@ -178,15 +178,24 @@ class ExampleController extends Controller
     }
 
     public function urltest(FormRequest $request){
-        $url = $request->get('cat');
-        $urlArray = parse_url($url);
-        $path = $urlArray['path'];
-        $exp = explode('/', $path);
-        if(count($exp) == 4){
-            echo $exp[2];
-        }elseif(count($exp) == 3 ){
-            echo $exp[1];
-        }
+        // $url = $request->get('cat');
+        // $urlArray = parse_url($url);
+        // $path = $urlArray['path'];
+        // $exp = explode('/', $path);
+        // if(count($exp) == 4){
+        //     echo $exp[2];
+        // }elseif(count($exp) == 3 ){
+        //     echo $exp[1];
+        // }
+        $url = parse_url('postgres://mujwarmufmglnv:2c4435cc6ab04535c058c933e8ef20ba1dba719f5c00d068d95705849c322d33@ec2-174-129-247-1.compute-1.amazonaws.com:5432/dans1i3ghplj95');
+
+       echo $host = $url["host"] ?? null;
+       echo '<br>';
+       echo $username = $url["user"] ?? null;
+       echo '<br>';
+       echo $password = $url["pass"] ?? null;
+       echo '<br>';
+       echo $database = substr($url["path"], 1) ?? null;
    
 
     }
