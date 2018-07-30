@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request as FormRequest;
 use Goutte\Client as GoutteClient;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Psr7\Request;
@@ -10,6 +12,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use Symfony\Component\CssSelector\CssSelectorConverter;
 use App\NewsModel as News;
+use App\PreNewsModel as PreNews;
 
 class ExampleController extends Controller
 {
@@ -28,9 +31,7 @@ class ExampleController extends Controller
             'base_uri' => 'https://jsonplaceholder.typicode.com',
             'timeout' => 20
         ]);
-        
-        // $request = new Request('GET','/posts');
-        
+                
         try{
            $response = $test->request('GET', 'posts');
            $body = $response->getBody();
@@ -73,7 +74,7 @@ class ExampleController extends Controller
             $description = $crawler->filter('item > description');
             $link = $crawler->filter('item > link');
             // $author = $crawler->filter('item > dc');
-            $date = $crawler->filter('item > pubDate');
+            // $date = $crawler->filter('item > pubDate');
 
         }
         catch(ConnectException $e){
@@ -98,41 +99,66 @@ class ExampleController extends Controller
                 array_push($description_array, strip_tags($row->nodeValue));
             }
             foreach($link as $row){
-               $linkName = $row->nodeValue;
-               $linkCrawl = $client->request('GET', $linkName);
-               $content = $linkCrawl->filter('div.content__article-body');
-               array_push($content_array,$content->text);
+                array_push($link_array, $row->nodeValue);     
+                // $linkName = $row->nodeValue;
+                // $linkCrawl = $client->request('GET', $linkName);
+                // $content = $linkCrawl->filter('div.content__article-body');
+                // array_push($content_array,$content->text);
 
             }
             // foreach($author as $row){
             //     array_push($author_array, $row);
             // }
-            foreach($date as $row){
-                array_push($date_array, $row->nodeValue);
-            }
+            // foreach($date as $row){
+            //     array_push($date_array, $row->nodeValue);
+            // }
 
             // print_r($title_array);
             // print_r($date_array);
-            print_r($content_array);
+            // print_r($content_array);
              
-            for ($i=0; $i <= count($description_array) - 1 ; $i++) { 
-                $news = new News;
-                $news->title = $title_array[$i];
-                $news->description = $description_array[$i];
-                $news->link = $link_array[$i];
-                // $news->author = $author_array[$i];
-                $news->date = $date_array[$i];
+            for($i=0; $i <= count($description_array) - 1 ; $i++){ 
+                    $news = new PreNews;
+                    $news->title = $title_array[$i];
+                    $news->description = $description_array[$i];
+                    $news->link = $link_array[$i];
+                    $news->category = 'environment';
+                    // $news->author = $author_array[$i];
+                    // $news->date = $date_array[$i];
 
-                // if($news->save()){   
-                //     $status[$i] = 'true';
-                // }
-                // else{
-                //     $status[$i] = 'false';
-                // }
-                    
+                    if($news->save()){   
+                        $status[$i] = 'true';
+                    }
+                    else{
+                        $status[$i] = 'false';
+                    }
+                        
             }
+            return print_r($status);
         }
         
+    }
+
+    public function api(FormRequest $request, $category){
+        if(!isset($category) || empty($category)){
+            return response()->json(['error'=>'No category specified' ]);
+        }else{
+            try{
+                $dbValues = DB::table('prenews')->where('category', $category)->get();
+            }catch(\Exception $e){
+                $dError = $e->getMessage();
+
+            }catch(\ErrorException $e){
+                $dError = $e->getMessage();
+            }
+            
+            if(isset($dbError)){
+                return response()->json(['error'=> $dbError]);;
+            }else{
+                return  response()->json($dbValues);
+            }
+
+        }      
     }
 
 }
