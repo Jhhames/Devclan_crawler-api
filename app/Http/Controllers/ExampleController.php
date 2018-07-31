@@ -203,4 +203,25 @@ class ExampleController extends Controller
 
     }
 
+    public function getCat(){
+        $categories = array(
+            'uk-news',
+            'politics',
+            'world',
+            'sports',
+            'football',
+            'culture',
+            'business',
+            'lifeandstyle',
+            'fashion',
+            'environment',
+            'technology',
+            'travel',
+            'money',
+            'science'
+        );
+        
+        return response()->json($categories);
+    }
+
 }

@@ -17,6 +17,6 @@ $router->get('/', function () use ($router) {
 
 $router->get('/getRequest','ExampleController@example');
 $router->get('crawl', 'ExampleController@crawlEg');
-$router->get('api/{category}','ExampleController@api' );
+$router->get('guardian/{category}','ExampleController@api' );
 $router->get('test', 'ExampleController@urltest');
- 
+$router->get('guardian/getcategories', 'ExampleController@getCat');
