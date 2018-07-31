@@ -187,13 +187,13 @@ class ExampleController extends Controller
         // }elseif(count($exp) == 3 ){
         //     echo $exp[1];
         // }
-        $url = parse_url('postgres://kjbfnxworpzzmq:bb65e236b02c6ee72a8471b56155b0c8cd6c34a186fb1aecbc491caac2f85f17@ec2-107-22-192-11.compute-1.amazonaws.com:5432/dc10ujmt88j11s');
+        $url = parse_url('mysql://bb89075a91dd51:dc7eb903@us-cdbr-iron-east-01.cleardb.net/heroku_12a889ee56593c1?reconnect=true');
 
        $host = $url["host"] ?? null;
        $username = $url["user"] ?? null;
        $password = $url["pass"] ?? null;
        $database = substr($url["path"], 1) ?? null;
-       $port = substr($url["port"], 1) ?? null;
+    //    $port = substr($url["port"], 1) ?? null;
             
        echo 'host: '.$host.'<br>';
        echo 'username: '.$username.'<br>';
