@@ -187,16 +187,19 @@ class ExampleController extends Controller
         // }elseif(count($exp) == 3 ){
         //     echo $exp[1];
         // }
-        $url = parse_url('postgres://mujwarmufmglnv:2c4435cc6ab04535c058c933e8ef20ba1dba719f5c00d068d95705849c322d33@ec2-174-129-247-1.compute-1.amazonaws.com:5432/dans1i3ghplj95');
+        $url = parse_url('postgres://kjbfnxworpzzmq:bb65e236b02c6ee72a8471b56155b0c8cd6c34a186fb1aecbc491caac2f85f17@ec2-107-22-192-11.compute-1.amazonaws.com:5432/dc10ujmt88j11s');
 
-       echo $host = $url["host"] ?? null;
-       echo '<br>';
-       echo $username = $url["user"] ?? null;
-       echo '<br>';
-       echo $password = $url["pass"] ?? null;
-       echo '<br>';
-       echo $database = substr($url["path"], 1) ?? null;
-   
+       $host = $url["host"] ?? null;
+       $username = $url["user"] ?? null;
+       $password = $url["pass"] ?? null;
+       $database = substr($url["path"], 1) ?? null;
+       $port = substr($url["port"], 1) ?? null;
+            
+       echo 'host: '.$host.'<br>';
+       echo 'username: '.$username.'<br>';
+       echo 'database: '.$database.'<br>';
+       echo 'password: '.$password.'<br>';
+       echo 'port: '.$port.'<br>';
 
     }
 
