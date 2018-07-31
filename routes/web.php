@@ -19,4 +19,4 @@ $router->get('/getRequest','ExampleController@example');
 $router->get('crawl', 'ExampleController@crawlEg');
 $router->get('guardian/{category}','ExampleController@api' );
 $router->get('test', 'ExampleController@urltest');
-$router->get('guardian/getcategories', 'ExampleController@getCat');
+$router->get('guardian/get/categories', 'ExampleController@getCat');
