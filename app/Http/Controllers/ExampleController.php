@@ -208,7 +208,7 @@ class ExampleController extends Controller
             'uk-news',
             'politics',
             'world',
-            'sports',
+            'sport',
             'football',
             'culture',
             'business',
