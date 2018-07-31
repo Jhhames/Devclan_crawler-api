@@ -23,20 +23,6 @@ $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
 
-$app->withFacades();
-
-$app->withEloquent();
-
-/*
-|--------------------------------------------------------------------------
-| Register Container Bindings
-|--------------------------------------------------------------------------
-|
-| Now we will register a few bindings in the service container. We will
-| register the exception handler and the console kernel. You may add
-| your own bindings here if you like or you can make another file.
-|
-*/
 $url = parse_url(getenv("DATABASE_URL"));
 
 $host = $url["host"] ?? null;
@@ -62,6 +48,23 @@ config([
     ],
 
 ]);
+
+
+$app->withFacades();
+
+$app->withEloquent();
+
+/*
+|--------------------------------------------------------------------------
+| Register Container Bindings
+|--------------------------------------------------------------------------
+|
+| Now we will register a few bindings in the service container. We will
+| register the exception handler and the console kernel. You may add
+| your own bindings here if you like or you can make another file.
+|
+*/
+
 
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
