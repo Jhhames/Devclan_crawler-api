@@ -169,7 +169,7 @@ class ExampleController extends Controller
             }
             
             if(isset($dbError)){
-                return response()->json(['error'=> $dbError]);;
+                return response()->json(['error'=> $dbError], 404);;
             }else{
                 return  response()->json($dbValues);
             }
